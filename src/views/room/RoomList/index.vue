@@ -21,7 +21,9 @@ const mockRoomList: RoomDetail[] = [
     createdAt: "2024-01-01 12:00:00",
     updatedAt: "2024-01-02 14:00:00",
     createdByName: "系统管理员",
-    updatedByName: "系统管理员"
+    updatedByName: "系统管理员",
+    accessLink:
+      "http://localhost:8848/#/request/CreateRequest?region=海淀区&center=海淀第一中心&roomId=1&roomName=机房A"
   },
   {
     roomId: 2,
@@ -38,11 +40,13 @@ const mockRoomList: RoomDetail[] = [
     createdAt: "2024-01-03 09:00:00",
     updatedAt: "2024-01-03 09:00:00",
     createdByName: "系统管理员",
-    updatedByName: "系统管理员"
+    updatedByName: "系统管理员",
+    accessLink:
+      "http://localhost:8848/#/request/CreateRequest?region=朝阳区&center=朝阳第一中心&roomId=2&roomName=机房B"
   }
 ];
 
-// 模拟区县和中心数据，复用创建页面的数据
+// 模拟区县和中心数据
 const mockRegions = ["海淀区", "朝阳区", "丰台区", "石景山区", "通州区"];
 const mockCenterMap = {
   海淀区: ["海淀第一中心", "海淀第二中心", "海淀第三中心"],
@@ -83,10 +87,14 @@ const editForm = reactive<RoomCreateRequest>({
   remarks: ""
 });
 
-// 门禁二维码对话框
-const qrDialogVisible = ref(false);
-const qrCodeUrl = ref("");
+// 门禁配置二维码（给门禁机扫的）对话框
+const lockQrDialogVisible = ref(false);
+const lockQrCodeUrl = ref("");
 const currentRoomName = ref("");
+
+// 进门申请二维码（给手机扫的）对话框
+const accessQrDialogVisible = ref(false);
+const accessQrCodeUrl = ref("");
 
 // 编辑相关数据
 const centerList = ref<string[]>([]);
@@ -127,7 +135,7 @@ const handleView = (row: RoomDetail) => {
   detailDialogVisible.value = true;
 };
 
-// 显示门禁配置二维码
+// 显示门禁配置二维码（给门禁机扫的）
 const handleConfigLock = async (row: RoomDetail) => {
   currentRoomName.value = row.roomName;
   // 生成包含房间信息的二维码数据
@@ -138,8 +146,20 @@ const handleConfigLock = async (row: RoomDetail) => {
   });
 
   try {
-    qrCodeUrl.value = await QRCode.toDataURL(qrData);
-    qrDialogVisible.value = true;
+    lockQrCodeUrl.value = await QRCode.toDataURL(qrData);
+    lockQrDialogVisible.value = true;
+  } catch (err) {
+    console.error("生成二维码失败:", err);
+    ElMessage.error("生成二维码失败");
+  }
+};
+
+// 显示进门申请二维码（给手机扫的）
+const handleShowAccessQr = async (row: RoomDetail) => {
+  currentRoomName.value = row.roomName;
+  try {
+    accessQrCodeUrl.value = await QRCode.toDataURL(row.accessLink);
+    accessQrDialogVisible.value = true;
   } catch (err) {
     console.error("生成二维码失败:", err);
     ElMessage.error("生成二维码失败");
@@ -224,7 +244,7 @@ const handleDelete = (row: RoomDetail) => {
 </script>
 
 <template>
-  <div class="room-list p-6">
+  <div class="room-list">
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
@@ -250,6 +270,13 @@ const handleDelete = (row: RoomDetail) => {
             </template>
           </template>
         </el-table-column>
+        <el-table-column label="进门二维码" align="center">
+          <template #default="{ row }">
+            <el-button type="primary" link @click="handleShowAccessQr(row)">
+              查看二维码
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleView(row)"
@@ -270,27 +297,27 @@ const handleDelete = (row: RoomDetail) => {
     <el-dialog v-model="detailDialogVisible" title="机房详情" width="600px">
       <template v-if="currentDetail">
         <el-descriptions :column="1" border>
-          <el-descriptions-item label="所属区县">{{
-            currentDetail.roomRegion
-          }}</el-descriptions-item>
-          <el-descriptions-item label="支撑中心">{{
-            currentDetail.roomCenter
-          }}</el-descriptions-item>
-          <el-descriptions-item label="机房名称">{{
-            currentDetail.roomName
-          }}</el-descriptions-item>
-          <el-descriptions-item label="机房长">{{
-            currentDetail.managerName
-          }}</el-descriptions-item>
-          <el-descriptions-item label="机房长电话">{{
-            currentDetail.managerPhone
-          }}</el-descriptions-item>
-          <el-descriptions-item label="备用机房长">{{
-            currentDetail.backupManagerName || "-"
-          }}</el-descriptions-item>
-          <el-descriptions-item label="备用机房长电话">{{
-            currentDetail.backupManagerPhone || "-"
-          }}</el-descriptions-item>
+          <el-descriptions-item label="所属区县">
+            {{ currentDetail.roomRegion }}
+          </el-descriptions-item>
+          <el-descriptions-item label="支撑中心">
+            {{ currentDetail.roomCenter }}
+          </el-descriptions-item>
+          <el-descriptions-item label="机房名称">
+            {{ currentDetail.roomName }}
+          </el-descriptions-item>
+          <el-descriptions-item label="机房长">
+            {{ currentDetail.managerName }}
+          </el-descriptions-item>
+          <el-descriptions-item label="机房长电话">
+            {{ currentDetail.managerPhone }}
+          </el-descriptions-item>
+          <el-descriptions-item label="备用机房长">
+            {{ currentDetail.backupManagerName || "-" }}
+          </el-descriptions-item>
+          <el-descriptions-item label="备用机房长电话">
+            {{ currentDetail.backupManagerPhone || "-" }}
+          </el-descriptions-item>
           <el-descriptions-item label="门锁状态">
             {{
               currentDetail.lockDeviceFlag
@@ -298,21 +325,21 @@ const handleDelete = (row: RoomDetail) => {
                 : "未配置"
             }}
           </el-descriptions-item>
-          <el-descriptions-item label="备注">{{
-            currentDetail.remarks || "-"
-          }}</el-descriptions-item>
-          <el-descriptions-item label="创建时间">{{
-            currentDetail.createdAt
-          }}</el-descriptions-item>
-          <el-descriptions-item label="创建人">{{
-            currentDetail.createdByName
-          }}</el-descriptions-item>
-          <el-descriptions-item label="更新时间">{{
-            currentDetail.updatedAt
-          }}</el-descriptions-item>
-          <el-descriptions-item label="更新人">{{
-            currentDetail.updatedByName
-          }}</el-descriptions-item>
+          <el-descriptions-item label="备注">
+            {{ currentDetail.remarks || "-" }}
+          </el-descriptions-item>
+          <el-descriptions-item label="创建时间">
+            {{ currentDetail.createdAt }}
+          </el-descriptions-item>
+          <el-descriptions-item label="创建人">
+            {{ currentDetail.createdByName }}
+          </el-descriptions-item>
+          <el-descriptions-item label="更新时间">
+            {{ currentDetail.updatedAt }}
+          </el-descriptions-item>
+          <el-descriptions-item label="更新人">
+            {{ currentDetail.updatedByName }}
+          </el-descriptions-item>
         </el-descriptions>
       </template>
     </el-dialog>
@@ -430,17 +457,31 @@ const handleDelete = (row: RoomDetail) => {
       </template>
     </el-dialog>
 
-    <!-- 门禁配置二维码对话框 -->
+    <!-- 门禁配置二维码对话框（给门禁机扫的） -->
     <el-dialog
-      v-model="qrDialogVisible"
+      v-model="lockQrDialogVisible"
       title="门禁配置二维码"
       width="400px"
       align-center
     >
       <div class="flex flex-col items-center">
         <h3 class="mb-4">{{ currentRoomName }}</h3>
-        <img :src="qrCodeUrl" alt="门禁配置二维码" class="w-64 h-64" />
+        <img :src="lockQrCodeUrl" alt="门禁配置二维码" class="w-64 h-64" />
         <p class="mt-4 text-gray-500">请使用门禁配置APP扫描此二维码</p>
+      </div>
+    </el-dialog>
+
+    <!-- 进门申请二维码对话框（给手机扫的） -->
+    <el-dialog
+      v-model="accessQrDialogVisible"
+      title="进门申请二维码"
+      width="400px"
+      align-center
+    >
+      <div class="flex flex-col items-center">
+        <h3 class="mb-4">{{ currentRoomName }}</h3>
+        <img :src="accessQrCodeUrl" alt="进门申请二维码" class="w-64 h-64" />
+        <p class="mt-4 text-gray-500">扫描二维码快速创建进门申请</p>
       </div>
     </el-dialog>
   </div>

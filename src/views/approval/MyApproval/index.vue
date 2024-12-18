@@ -120,8 +120,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-.my-approvals {
-  padding: 1.5rem;
-}
-</style>
+<style scoped></style>

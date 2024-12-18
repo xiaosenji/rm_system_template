@@ -174,8 +174,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-.access-records {
-  padding: 1.5rem;
-}
-</style>
+<style scoped></style>

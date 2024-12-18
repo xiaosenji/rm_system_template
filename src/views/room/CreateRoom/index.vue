@@ -131,7 +131,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <template>
-  <div class="room-create p-6">
+  <div class="room-create">
     <el-card class="box-card">
       <template #header>
         <div class="card-header">

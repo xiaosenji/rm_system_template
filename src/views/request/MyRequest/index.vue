@@ -165,8 +165,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-.my-requests {
-  padding: 1.5rem;
-}
-</style>
+<style scoped></style>
