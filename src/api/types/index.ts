@@ -68,7 +68,6 @@ export interface RoomDetail {
   updatedAt: string;
   createdByName: string;
   updatedByName: string;
-  accessLink?: string;
 }
 
 export interface RoomManager {

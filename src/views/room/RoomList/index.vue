@@ -21,9 +21,7 @@ const mockRoomList: RoomDetail[] = [
     createdAt: "2024-01-01 12:00:00",
     updatedAt: "2024-01-02 14:00:00",
     createdByName: "系统管理员",
-    updatedByName: "系统管理员",
-    accessLink:
-      "http://localhost:8848/#/request/CreateRequest?region=海淀区&center=海淀第一中心&roomId=1&roomName=机房A"
+    updatedByName: "系统管理员"
   },
   {
     roomId: 2,
@@ -40,9 +38,7 @@ const mockRoomList: RoomDetail[] = [
     createdAt: "2024-01-03 09:00:00",
     updatedAt: "2024-01-03 09:00:00",
     createdByName: "系统管理员",
-    updatedByName: "系统管理员",
-    accessLink:
-      "http://localhost:8848/#/request/CreateRequest?region=朝阳区&center=朝阳第一中心&roomId=2&roomName=机房B"
+    updatedByName: "系统管理员"
   }
 ];
 
@@ -158,7 +154,16 @@ const handleConfigLock = async (row: RoomDetail) => {
 const handleShowAccessQr = async (row: RoomDetail) => {
   currentRoomName.value = row.roomName;
   try {
-    accessQrCodeUrl.value = await QRCode.toDataURL(row.accessLink);
+    // 构建创建申请页面的URL
+    const createRequestPath = `/request/CreateRequest?region=${encodeURIComponent(row.roomRegion)}&center=${encodeURIComponent(row.roomCenter)}&roomId=${row.roomId}&roomName=${encodeURIComponent(row.roomName)}`;
+
+    // 构建完整的重定向URL（包含登录页面和重定向参数）
+    const redirectUrl = `${window.location.origin}${window.location.pathname}#/login?redirect=${encodeURIComponent(createRequestPath)}`;
+
+    console.log("生成的重定向URL:", redirectUrl);
+
+    // 生成二维码
+    accessQrCodeUrl.value = await QRCode.toDataURL(redirectUrl);
     accessQrDialogVisible.value = true;
   } catch (err) {
     console.error("生成二维码失败:", err);
