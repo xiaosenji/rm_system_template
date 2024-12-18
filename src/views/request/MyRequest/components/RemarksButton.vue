@@ -1,4 +1,3 @@
-// src/views/access/components/RemarksButton.vue
 <script setup lang="ts">
 import { ref } from "vue";
 

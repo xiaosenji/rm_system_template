@@ -1,4 +1,4 @@
-import http from "@/utils/http";
+import { http } from "@/utils/http";
 import type { ApiResponse } from "../types";
 
 /** Get regions list */

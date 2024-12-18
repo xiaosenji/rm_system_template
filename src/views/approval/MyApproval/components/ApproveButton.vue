@@ -1,4 +1,3 @@
-// src/views/access/components/approval/ApproveButton.vue
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { ElMessage, FormInstance, FormRules } from "element-plus";

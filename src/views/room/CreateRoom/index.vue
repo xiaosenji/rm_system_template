@@ -1,4 +1,3 @@
-// src/views/room/RoomCreate.vue
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import type { FormInstance, FormRules } from "element-plus";

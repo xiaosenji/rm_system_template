@@ -1,4 +1,3 @@
-// src/views/access/components/AccessCodeButton.vue
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import * as QRCode from "qrcode";

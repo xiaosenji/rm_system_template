@@ -1,4 +1,3 @@
-// src/views/access/components/approval/ViewButton.vue
 <script setup lang="ts">
 import { ref } from "vue";
 import type { PendingApproval } from "@/api/types";

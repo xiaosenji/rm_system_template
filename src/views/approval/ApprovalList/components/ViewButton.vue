@@ -1,4 +1,3 @@
-// src/views/access/components/record/ViewButton.vue
 <script setup lang="ts">
 import { ref } from "vue";
 import type { ApprovalResult } from "@/api/types";

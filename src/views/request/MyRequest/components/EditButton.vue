@@ -1,4 +1,3 @@
-// src/views/access/components/EditButton.vue
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, FormInstance, FormRules } from "element-plus";

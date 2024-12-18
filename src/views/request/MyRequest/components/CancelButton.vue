@@ -1,4 +1,3 @@
-// src/views/access/components/CancelButton.vue
 <script setup lang="ts">
 import { ElMessageBox } from "element-plus";
 

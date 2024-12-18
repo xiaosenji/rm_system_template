@@ -1,4 +1,3 @@
-// src/views/room/RoomList.vue
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import type { FormInstance } from "element-plus";

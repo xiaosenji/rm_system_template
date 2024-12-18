@@ -1,4 +1,3 @@
-// src/views/access/components/ViewButton.vue
 <script setup lang="ts">
 import { ref } from "vue";
 import type { AccessRequest } from "@/api/types";

@@ -16,27 +16,36 @@ const mockData: AccessRequest[] = [
   {
     requestId: 1,
     applicantName: "张三",
+    contact: "",
     roomName: "机房A",
     requestType: "临时访问",
     visitPurpose: "设备维护",
+    plannedEntryTime: "",
+    plannedExitTime: "",
     requestStatus: "待审批",
     approvalRemarks: ""
   },
   {
     requestId: 2,
     applicantName: "李四",
+    contact: "",
     roomName: "机房B",
     requestType: "常规访问",
     visitPurpose: "日常巡检",
+    plannedEntryTime: "",
+    plannedExitTime: "",
     requestStatus: "已通过",
     accessCode: "ABC123"
   },
   {
     requestId: 3,
     applicantName: "王五",
+    contact: "",
     roomName: "机房C",
     requestType: "紧急访问",
     visitPurpose: "故障处理",
+    plannedEntryTime: "",
+    plannedExitTime: "",
     requestStatus: "已驳回",
     approvalRemarks: "请提供更详细的访问说明"
   }

@@ -61,6 +61,8 @@ export interface RoomDetail {
   backupManagerName: string;
   lockDeviceFlag: boolean;
   lockDeviceSn?: string;
+  managerPhone: string;
+  backupManagerPhone: string;
   remarks?: string;
   createdAt: string;
   updatedAt: string;
