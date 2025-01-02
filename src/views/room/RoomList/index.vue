@@ -145,7 +145,6 @@ const handleConfigLock = async (row: RoomDetail) => {
     lockQrCodeUrl.value = await QRCode.toDataURL(qrData);
     lockQrDialogVisible.value = true;
   } catch (err) {
-    console.error("生成二维码失败:", err);
     ElMessage.error("生成二维码失败");
   }
 };
@@ -160,13 +159,10 @@ const handleShowAccessQr = async (row: RoomDetail) => {
     // 构建完整的重定向URL（包含登录页面和重定向参数）
     const redirectUrl = `${window.location.origin}${window.location.pathname}#/login?redirect=${encodeURIComponent(createRequestPath)}`;
 
-    console.log("生成的重定向URL:", redirectUrl);
-
     // 生成二维码
     accessQrCodeUrl.value = await QRCode.toDataURL(redirectUrl);
     accessQrDialogVisible.value = true;
   } catch (err) {
-    console.error("生成二维码失败:", err);
     ElMessage.error("生成二维码失败");
   }
 };
@@ -224,7 +220,6 @@ const submitEdit = async (formEl: FormInstance | undefined) => {
 
   await formEl.validate(valid => {
     if (valid) {
-      console.log("提交修改数据:", editForm);
       ElMessage.success("修改成功");
       editDialogVisible.value = false;
     }
@@ -239,7 +234,6 @@ const handleDelete = (row: RoomDetail) => {
     type: "warning"
   })
     .then(() => {
-      console.log("删除机房:", row.roomId);
       ElMessage.success("删除成功");
     })
     .catch(() => {
@@ -275,7 +269,7 @@ const handleDelete = (row: RoomDetail) => {
             </template>
           </template>
         </el-table-column>
-        <el-table-column label="进门二维码" align="center">
+        <el-table-column label="申请二维码" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleShowAccessQr(row)">
               查看二维码

@@ -47,10 +47,8 @@ const getRedirectInfo = () => {
   try {
     // 获取重定向路径
     const redirectPath = route.query.redirect as string;
-    console.log("重定向路径:", redirectPath);
 
     if (!redirectPath) {
-      console.log("没有重定向路径，返回首页");
       return {
         path: DEFAULT_HOME,
         query: {}
@@ -59,7 +57,6 @@ const getRedirectInfo = () => {
 
     // 将重定向路径解析为URL对象
     const url = new URL(redirectPath, window.location.origin);
-    console.log("解析后的URL:", url);
 
     // 从URL中获取路径和查询参数
     const pathWithQuery = url.hash ? url.hash.slice(1) : url.pathname;
@@ -71,15 +68,11 @@ const getRedirectInfo = () => {
       query[key] = value;
     });
 
-    console.log("提取的路径:", pathWithQuery);
-    console.log("提取的参数:", query);
-
     return {
       path: pathWithQuery,
       query
     };
   } catch (error) {
-    console.error("解析重定向信息失败:", error);
     return {
       path: DEFAULT_HOME,
       query: {}
@@ -89,7 +82,6 @@ const getRedirectInfo = () => {
 
 // 获取重定向信息
 const redirectInfo = getRedirectInfo();
-console.log("重定向信息:", redirectInfo);
 
 const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -105,7 +97,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
           if (res.success) {
             // 获取后端路由
             return initRouter().then(() => {
-              console.log("准备跳转到:", redirectInfo);
               // 使用保存的重定向信息进行跳转
               router
                 .push(redirectInfo)
@@ -113,7 +104,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
                   message("登录成功", { type: "success" });
                 })
                 .catch(error => {
-                  console.error("路由跳转失败:", error);
                   message("登录成功，但跳转失败", { type: "warning" });
                   // 跳转失败时使用默认路由
                   router.push(DEFAULT_HOME);
@@ -124,7 +114,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
           }
         })
         .catch(error => {
-          console.error("登录失败:", error);
           message("登录发生错误", { type: "error" });
         })
         .finally(() => {
@@ -143,7 +132,6 @@ function onkeypress({ code }: KeyboardEvent) {
 
 onMounted(() => {
   window.document.addEventListener("keypress", onkeypress);
-  console.log("当前路由参数:", route.query);
 });
 
 onBeforeUnmount(() => {

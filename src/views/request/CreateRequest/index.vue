@@ -199,7 +199,7 @@ onMounted(async () => {
     // 设置时间：进入时间为当前时间，离开时间为8小时后
     const now = dayjs();
     form.plannedEntryTime = now.format("YYYY-MM-DD HH:mm:ss");
-    form.plannedExitTime = now.add(8, "hour").format("YYYY-MM-DD HH:mm:ss");
+    form.plannedExitTime = now.add(5, "minute").format("YYYY-MM-DD HH:mm:ss");
   }
 });
 </script>

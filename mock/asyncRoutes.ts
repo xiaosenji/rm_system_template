@@ -10,6 +10,7 @@ const permissionRouter = {
   path: "/permission",
   meta: {
     title: "权限管理",
+    showLink: false,
     icon: "ep:lollipop",
     rank: 10
   },
